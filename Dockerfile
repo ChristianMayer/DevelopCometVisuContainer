@@ -1,11 +1,13 @@
-FROM php:apache
-WORKDIR "/var/www/html/"
+FROM php:7.2-apache
+#WORKDIR "/var/www/html/"
 
 # Fix debconf warnings upon build
-ARG DEBIAN_FRONTEND=noninteractive
+#ARG DEBIAN_FRONTEND=noninteractive
 
 # Install selected extensions and other stuff
 #RUN apt-get update \
 #    && apt-get -y --no-install-recommends install  php-xdebug \
 #    && apt-get -y install git sshfs \
 #    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+CMD ["apache2-foreground"]
