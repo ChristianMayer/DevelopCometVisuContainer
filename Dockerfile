@@ -24,7 +24,7 @@ RUN { \
 		echo '\tAllowOverride All'; \
 		echo '</Directory>'; \
 	} | tee "$APACHE_CONFDIR/conf-available/cm-docker-php.conf" \
-	&& a2disconf docker-php
+	&& a2disconf docker-php \
 	&& a2enconf cm-docker-php
 
 RUN pecl install xdebug-2.6.0 \
