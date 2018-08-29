@@ -39,11 +39,13 @@ RUN { \
         echo 'log_errors=On'; \
         echo 'error_log=/dev/stderr'; \
         echo 'file_uploads=On'; \
-    } | tee "/usr/local/etc/php/php.ini" \
-    && echo "export LS_OPTIONS='--color=auto'" >>> /root/.bashrc \
-    && echo "eval \"`dircolors`\"" >>> /root/.bashrc \
-    && echo "alias ls='ls \$LS_OPTIONS'" >>> /root/.bashrc \
-    && echo "alias ll='ls \$LS_OPTIONS -l'" >>> /root/.bashrc \
-    && echo "alias l='ls \$LS_OPTIONS -lA'" >>> /root/.bashrc
+    } | tee "/usr/local/etc/php/php.ini"
+RUN { \
+        echo "export LS_OPTIONS='--color=auto'"; \
+        echo "eval \"`dircolors`\""; \
+        echo "alias ls='ls \$LS_OPTIONS'"; \
+        echo "alias ll='ls \$LS_OPTIONS -l'"; \
+        echo "alias l='ls \$LS_OPTIONS -lA'"; \
+     } | tee -a "/root/.bashrc"
 
 CMD ["apache2-foreground"]
