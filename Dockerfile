@@ -30,4 +30,20 @@ RUN { \
 RUN pecl install xdebug-2.6.0 \
     && docker-php-ext-enable xdebug
 
+# Options - especially for development.
+# DO NOT USE for running a real server!
+RUN { \
+        echo 'xdebug.remote_connect_back=1'; \
+        echo 'xdebug.remote_port=9000'; \
+        echo 'display_errors=Off'; \
+        echo 'log_errors=On'; \
+        echo 'error_log=/dev/stderr'; \
+        echo 'file_uploads=On'; \
+    } | tee "/usr/local/etc/php/php.ini" \
+    && echo "export LS_OPTIONS='--color=auto'" >>> /root/.bashrc \
+    && echo "eval \"`dircolors`\"" >>> /root/.bashrc \
+    && echo "alias ls='ls \$LS_OPTIONS'" >>> /root/.bashrc \
+    && echo "alias ll='ls \$LS_OPTIONS -l'" >>> /root/.bashrc \
+    && echo "alias l='ls \$LS_OPTIONS -lA'" >>> /root/.bashrc
+
 CMD ["apache2-foreground"]
