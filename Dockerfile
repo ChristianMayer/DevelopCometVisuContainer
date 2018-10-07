@@ -14,7 +14,7 @@ FROM php:7.2-apache
 # Compile eibd 0.0.5
 RUN apt-get -qq update
 RUN apt-get install -y python python-dev python-pip python-virtualenv
-RUN apt-get install -y build-essential gcc git rsync cmake make g++ binutils automake flex bison patch wget
+RUN apt-get install -y build-essential gcc git rsync cmake make g++ binutils automake flex bison patch wget libtool
 
 ENV KNXDIR /usr
 ENV INSTALLDIR $KNXDIR/local
