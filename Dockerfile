@@ -39,9 +39,9 @@ RUN tar -xzf bcusdk_0.0.5.tar.gz
 RUN cd bcusdk-0.0.5 && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
 RUN useradd eibd -s /bin/false -U -M
-ADD eibd.sh /etc/init.d/eibd
-RUN chmod +x /etc/init.d/eibd
-RUN update-rc.d eibd defaults 98 02
+#ADD eibd.sh /etc/init.d/eibd
+#RUN chmod +x /etc/init.d/eibd
+#RUN update-rc.d eibd defaults 98 02
 
 EXPOSE 6720
 ##################
