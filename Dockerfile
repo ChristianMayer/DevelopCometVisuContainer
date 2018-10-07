@@ -24,7 +24,7 @@ ENV LD_LIBRARY_PATH $INSTALLDIR/lib
 WORKDIR $SOURCEDIR
 
 # build pthsem
-RUN wget https://osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fpthsem%2Fpthsem_2.0.8.tar.gz
+RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fpthsem%2Fpthsem_2.0.8.tar.gz"
 RUN tar -xzf pthsem_2.0.8.tar.gz
 RUN cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test && make install
 
@@ -34,7 +34,7 @@ RUN cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test &&
 #RUN cd linknx-0.0.1.32 && ./configure --without-log4cpp --without-lua --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
 # build eibd
-RUN wget https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz
+RUN wget -O bcusdk_0.0.5.tar.gz "https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz"
 RUN tar -xzf bcusdk_0.0.5.tar.gz
 RUN cd bcusdk-0.0.5 && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
