@@ -34,7 +34,8 @@ RUN cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test &&
 #RUN cd linknx-0.0.1.32 && ./configure --without-log4cpp --without-lua --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
 # build eibd
-RUN wget -O bcusdk_0.0.5.tar.gz "https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz"
+#RUN wget -O bcusdk_0.0.5.tar.gz "https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz"
+RUN wget -O bcusdk_0.0.5.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz"
 RUN tar -xzf bcusdk_0.0.5.tar.gz
 RUN cd bcusdk-0.0.5 && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
@@ -42,6 +43,8 @@ RUN useradd eibd -s /bin/false -U -M
 #ADD eibd.sh /etc/init.d/eibd
 #RUN chmod +x /etc/init.d/eibd
 #RUN update-rc.d eibd defaults 98 02
+
+#RUN /usr/src/bcusdk-0.0.5/eibd/server/eibd -e 1.2.3 -c -u -d ipt:192.168.0.30
 
 EXPOSE 6720
 ##################
