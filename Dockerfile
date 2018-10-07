@@ -14,7 +14,8 @@ FROM php:7.2-apache
 # Compile eibd 0.0.5
 RUN apt-get -qq update \
  && apt-get install -y python python-dev python-pip python-virtualenv \
- && apt-get install -y build-essential gcc git rsync cmake make g++ binutils automake flex bison patch wget libtool
+ && apt-get install -y build-essential gcc git rsync cmake make g++ binutils automake flex bison patch wget libtool \
+ && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 ENV KNXDIR /usr
 ENV INSTALLDIR $KNXDIR/local
@@ -45,6 +46,7 @@ RUN useradd eibd -s /bin/false -U -M
 #RUN update-rc.d eibd defaults 98 02
 
 #RUN /usr/src/bcusdk-0.0.5/eibd/server/eibd -e 1.2.3 -c -u -d ipt:192.168.0.30
+RUN /usr/local/bin/knxd -d -e 1.1.239 -c -u ipt:192.168.0.30
 
 EXPOSE 6720
 ##################
