@@ -37,7 +37,7 @@ RUN cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test &&
 #RUN wget -O bcusdk_0.0.5.tar.gz "https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz"
 RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz"
 RUN tar -xzf knxd_0.0.5.1.tar.gz
-RUN cd knxd-0.0.5.1 && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
+RUN cd knxd-0.0.5.1 && ./bootstrap.sh && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
 RUN useradd eibd -s /bin/false -U -M
 #ADD eibd.sh /etc/init.d/eibd
