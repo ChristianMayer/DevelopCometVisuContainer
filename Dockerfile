@@ -46,7 +46,10 @@ RUN useradd eibd -s /bin/false -U -M
 #RUN update-rc.d eibd defaults 98 02
 
 #RUN /usr/src/bcusdk-0.0.5/eibd/server/eibd -e 1.2.3 -c -u -d ipt:192.168.0.30
-RUN /usr/local/bin/knxd -d -e 1.1.239 -c -u ipt:192.168.0.30
+#RUN /usr/local/bin/knxd -d -e 1.1.239 -c -u ipt:192.168.0.30
+# knxd -u -i ipt:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023
+#knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023 -f9
+RUN /usr/local/bin/knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c
 
 EXPOSE 6720
 ##################
