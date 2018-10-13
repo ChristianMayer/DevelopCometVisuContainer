@@ -11,7 +11,7 @@ FROM php:7.2-apache
 #    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 ##################
-# Compile eibd 0.0.5
+# Compile knxd 0.0.5.1
 RUN apt-get -qq update \
  && apt-get install -y python python-dev python-pip python-virtualenv \
  && apt-get install -y build-essential gcc git rsync cmake make g++ binutils automake flex bison patch wget libtool \
@@ -38,9 +38,16 @@ RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusd
 #RUN wget -O bcusdk_0.0.5.tar.gz "https://de.osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fbcusdk%2Fbcusdk_0.0.5.tar.gz"
 RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz" \
  && tar -xzf knxd_0.0.5.1.tar.gz \
- && cd knxd-0.0.5.1 && ./bootstrap.sh && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
+ && cd knxd-0.0.5.1 && ./bootstrap.sh \
+ && ./configure --enable-onlyeibd --enable-eibnetip --enable-eibnetiptunnel --disable-eibnetipserver \
+    --disable-ft12 --disable-pei16 --disable-tpuart --disable-pei16s  --disable-tpuarts --disable-usb --disable-ncn5120 \
+    --enable-groupcache --disable-java \
+    --disable-shared --enable-static \
+    --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ \
+ && make && make install
+# && cd knxd-0.0.5.1 && ./bootstrap.sh && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
-RUN useradd eibd -s /bin/false -U -M
+#RUN useradd eibd -s /bin/false -U -M
 #ADD eibd.sh /etc/init.d/eibd
 #RUN chmod +x /etc/init.d/eibd
 #RUN update-rc.d eibd defaults 98 02
@@ -74,7 +81,7 @@ RUN { \
 	    echo "#!/bin/sh"; \
         echo "echo Content-Type: text/plain"; \
         echo "echo"; \
-        echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\" }'; \
+        echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\" }"'; \
         } | tee "/usr/lib/cgi-bin/l" \
 	&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r \
 	&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
