@@ -120,4 +120,4 @@ RUN { \
      } | tee -a "/root/.bashrc"
 
 #CMD ["apache2-foreground"]
-CMD /usr/local/bin/knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && apache2-foreground
+CMD knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && chmod a+w /tmp/eib && apache2-foreground
