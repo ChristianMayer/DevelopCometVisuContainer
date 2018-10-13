@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.2-apache as builder
 #WORKDIR "/var/www/html/"
 
 # Fix debconf warnings upon build
@@ -52,6 +52,13 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
 #RUN chmod +x /etc/init.d/eibd
 #RUN update-rc.d eibd defaults 98 02
 
+##############
+# Run environment
+FROM php:7.2-apache
+COPY --from=builder /usr/local/bin/knxd /usr/local/bin/knxd
+COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r
+COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w
+
 #RUN /usr/src/bcusdk-0.0.5/eibd/server/eibd -e 1.2.3 -c -u -d ipt:192.168.0.30
 #RUN /usr/local/bin/knxd -d -e 1.1.239 -c -u ipt:192.168.0.30
 # knxd -u -i ipt:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023
@@ -83,8 +90,9 @@ RUN { \
         echo "echo"; \
         echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\" }"'; \
         } | tee "/usr/lib/cgi-bin/l" \
-	&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r \
-	&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
+    && chmod +x /usr/lib/cgi-bin/l \
+	#& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r \
+	#& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
 	&& a2enmod cgi
 
 RUN pecl install xdebug-2.6.0 \
