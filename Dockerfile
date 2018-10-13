@@ -119,4 +119,5 @@ RUN { \
         echo "alias l='ls \$LS_OPTIONS -lA'"; \
      } | tee -a "/root/.bashrc"
 
-CMD ["apache2-foreground"]
+#CMD ["apache2-foreground"]
+CMD /usr/local/bin/knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && apache2-foreground
