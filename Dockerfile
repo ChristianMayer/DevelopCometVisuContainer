@@ -57,6 +57,7 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
 FROM php:7.2-apache
 COPY --from=builder /usr/local/bin/knxd /usr/local/bin/knxd
 COPY --from=builder /usr/local/lib/lib* /usr/local/lib/
+COPY --from=builder src/examples/busmonitor1 src/examples/vbusmonitor1 src/examples/vbusmonitor1time src/examples/vbusmonitor2 src/examples/groupswrite src/examples/groupwrite src/examples/groupread src/examples/groupreadresponse src/examples/groupcacheread src/examples/groupsocketread .
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w
 
