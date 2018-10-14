@@ -97,6 +97,11 @@ RUN { \
 	#& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
 	&& a2enmod cgi
 
+RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+ && tar xvf CometVisu.tar.gz \
+ && mv cometvisu/release/* /var/www/html/ \
+ && rm -rf cometvisu CometVisu.tar.gz
+
 RUN pecl install xdebug-2.6.0 \
     && docker-php-ext-enable xdebug
 
