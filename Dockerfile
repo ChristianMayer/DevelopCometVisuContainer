@@ -52,6 +52,9 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
 #RUN chmod +x /etc/init.d/eibd
 #RUN update-rc.d eibd defaults 98 02
 
+RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+ && tar xvf CometVisu.tar.gz
+
 ##############
 # Run environment
 FROM php:7.2-apache
@@ -97,10 +100,11 @@ RUN { \
 	#& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
 	&& a2enmod cgi
 
-RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
- && tar xvf CometVisu.tar.gz \
- && mv cometvisu/release/* /var/www/html/ \
- && rm -rf cometvisu CometVisu.tar.gz
+#RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+# && tar xvf CometVisu.tar.gz \
+# && mv cometvisu/release/* /var/www/html/ \
+# && rm -rf cometvisu CometVisu.tar.gz
+COPY --from=builder /usr/src/cometvisu/release/* /var/www/html/
 
 RUN pecl install xdebug-2.6.0 \
     && docker-php-ext-enable xdebug
