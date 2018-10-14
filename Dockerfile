@@ -104,7 +104,7 @@ RUN { \
 # && tar xvf CometVisu.tar.gz \
 # && mv cometvisu/release/* /var/www/html/ \
 # && rm -rf cometvisu CometVisu.tar.gz
-COPY --from=builder /usr/src/cometvisu/release/* /var/www/html/
+COPY --from=builder /usr/src/cometvisu/release/ /var/www/html/
 
 RUN pecl install xdebug-2.6.0 \
     && docker-php-ext-enable xdebug
