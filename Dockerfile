@@ -109,7 +109,7 @@ RUN { \
     echo "alias l='ls \$LS_OPTIONS -lA'"; \
     } | tee -a "/root/.bashrc"
 
-RUN {
+RUN { \
     echo "#!/bin/sh"; \
     echo "knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c"; \
     echo "chmod a+w /tmp/eib"; \
