@@ -39,9 +39,32 @@ RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/dow
 # Run environment
 FROM php:7.2-apache
 
-LABEL maintainer="http://www.cometvisu.org/" \
-      org.cometvisu.version="0.10.2" \
-      org.cometvisu.knxd.version="0.0.5.1"
+# Own labels
+LABEL maintainer="http://www.cometvisu.org/"
+LABEL org.cometvisu.version="0.10.2"
+LABEL org.cometvisu.knxd.version="0.0.5.1"
+# Labels according to http://label-schema.org/rc1/
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.build-date=$BUILD_DATE
+LABEL org.label-schema.name="CometVisu"
+LABEL org.label-schema.description="The CometVisu visualistion"
+LABEL org.label-schema.usage="README.md"
+LABEL org.label-schema.url="http://www.cometvisu.org"
+LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
+LABEL org.label-schema.vcs-ref="<...>"
+LABEL org.label-schema.vendor="The CometVisu project"
+LABEL org.label-schema.version="0.10.2"
+
+# just for testing automated variables
+LABEL test.SOURCE_BRANCH=$SOURCE_BRANCH
+LABEL test.SOURCE_COMMIT=$SOURCE_COMMIT
+LABEL test.COMMIT_MSG=$COMMIT_MSG
+LABEL test.DOCKER_REPO=$DOCKER_REPO
+LABEL test.DOCKERFILE_PATH=$DOCKERFILE_PATH
+LABEL test.CACHE_TAG=$CACHE_TAG
+LABEL test.IMAGE_NAME=$IMAGE_NAME
+RUN MYTEST=`date`
+LABEL test.test=$MYTEST
 
 COPY --from=builder /usr/local/bin/knxd /usr/bin/knxd
 COPY --from=builder /usr/local/lib/libpthsem.so.20 /usr/lib/
