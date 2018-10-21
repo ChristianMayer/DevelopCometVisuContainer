@@ -43,7 +43,7 @@ RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/dow
 # Run environment
 FROM php:7.2-apache
 
-LABEL maintainer="docker@cometvisu.org" \
+LABEL maintainer="http://www.cometvisu.org/" \
       org.cometvisu.version="0.10.2" \
       org.cometvisu.knxd.version="0.0.5.1"
 
@@ -59,7 +59,8 @@ COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi
 #knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023 -f9
 ##RUN /usr/local/bin/knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c
 
-EXPOSE 6720
+## The knxd port:
+#EXPOSE 6720
 ##################
 
 # Overwrite package default - allow index
@@ -93,20 +94,19 @@ RUN { \
 
 COPY --from=builder /usr/src/cometvisu/release/ /var/www/html/
 
-RUN pecl install xdebug-2.6.0 \
-    && docker-php-ext-enable xdebug
-
 # Options - especially for development.
 # DO NOT USE for running a real server!
-RUN { \
-    echo 'xdebug.remote_enable=1'; \
-    echo 'xdebug.remote_connect_back=1'; \
-    echo 'xdebug.remote_port=9000'; \
-    echo 'display_errors=Off'; \
-    echo 'log_errors=On'; \
-    echo 'error_log=/dev/stderr'; \
-    echo 'file_uploads=On'; \
-    } | tee "/usr/local/etc/php/php.ini"
+#RUN pecl install xdebug-2.6.0 \
+# && docker-php-ext-enable xdebug \
+# && { \
+#    echo 'xdebug.remote_enable=1'; \
+#    echo 'xdebug.remote_connect_back=1'; \
+#    echo 'xdebug.remote_port=9000'; \
+#    echo 'display_errors=Off'; \
+#    echo 'log_errors=On'; \
+#    echo 'error_log=/dev/stderr'; \
+#    echo 'file_uploads=On'; \
+#    } | tee "/usr/local/etc/php/php.ini"
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
     echo "eval \"`dircolors`\""; \
@@ -115,18 +115,32 @@ RUN { \
     echo "alias l='ls \$LS_OPTIONS -lA'"; \
     } | tee -a "/root/.bashrc"
 
-RUN { \
-    echo "#!/bin/sh"; \
-    echo "knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c"; \
-    echo "chmod a+w /tmp/eib"; \
-    echo "echo knxd -i \$KNX_INTERFACE -e \$KNX_PA \$KNXD_PARAMETERS"; \
-    echo "apache2-foreground"; \
-    } | tee -a "/usr/local/bin/container_run.sh" && chmod +x /usr/local/bin/container_run.sh
+#RUN { \
+#    echo "#!/bin/sh"; \
+#    echo "set -e"; \
+#    #echo "knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c"; \
+#    echo "knxd -i \$KNX_INTERFACE -e \$KNX_PA \$KNXD_PARAMETERS"; \
+#    echo "chmod a+w /tmp/eib"; \
+#    echo "apache2-foreground"; \
+#    echo "if [ \"\${1#-}\" != \"$1\" ]; then"; \
+#    echo "    set -- apache2-foreground \"\$@\""; \
+#    echo "fi"; \
+#    echo "exec \"\$@\""; \
+#    } | tee -a "/usr/local/bin/cometvisu-entrypoint" && chmod +x /usr/local/bin/cometvisu-entrypoint
+COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
+ENTRYPOINT ["cometvisu-entrypoint"]
+
+VOLUME /var/www/html/config
 
 ENV KNX_INTERFACE iptn:172.17.0.1:3700
 ENV KNX_PA 1.1.238
 ENV KNXD_PARAMETERS -u -d/var/log/eibd.log -c
 
-#CMD ["apache2-foreground"]
+ENV CGI_PATH /cgi-bin/
+
+# TODO:
+# HEALTHCHECK
+
+CMD ["apache2-foreground"]
 #CMD knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && chmod a+w /tmp/eib && apache2-foreground
-CMD knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c && chmod a+w /tmp/eib && apache2-foreground
+#CMD knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c && chmod a+w /tmp/eib && apache2-foreground
