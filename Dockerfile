@@ -42,6 +42,11 @@ RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/dow
 ##############
 # Run environment
 FROM php:7.2-apache
+
+LABEL maintainer="docker@cometvisu.org" \
+      org.cometvisu.version="0.10.2" \
+      org.cometvisu.knxd.version="0.0.5.1"
+
 COPY --from=builder /usr/local/bin/knxd /usr/bin/knxd
 COPY --from=builder /usr/local/lib/lib* /usr/lib/
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/busmonitor1 /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor1 /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor1time /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor2 /usr/src/knxd-0.0.5.1/src/examples/groupswrite /usr/src/knxd-0.0.5.1/src/examples/groupwrite /usr/src/knxd-0.0.5.1/src/examples/groupread /usr/src/knxd-0.0.5.1/src/examples/groupreadresponse /usr/src/knxd-0.0.5.1/src/examples/groupcacheread /usr/src/knxd-0.0.5.1/src/examples/groupsocketread /usr/local/bin/
@@ -78,6 +83,7 @@ RUN { \
     echo "echo Content-Type: text/plain"; \
     echo "echo"; \
     echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\" }"'; \
+#    echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\", \"c\": {\"baseURL\": \"/proxy/cgi-bin/\"} }"'; \
     } | tee "/usr/lib/cgi-bin/l" \
  && chmod +x /usr/lib/cgi-bin/l \
 #&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r \
@@ -113,8 +119,13 @@ RUN { \
     echo "#!/bin/sh"; \
     echo "knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c"; \
     echo "chmod a+w /tmp/eib"; \
+    echo "echo knxd -i \$KNX_INTERFACE -e \$KNX_PA \$KNXD_PARAMETERS"; \
     echo "apache2-foreground"; \
-    } | tee -a "container_run.sh" && chmod +x container_run.sh
+    } | tee -a "/usr/local/bin/container_run.sh" && chmod +x /usr/local/bin/container_run.sh
+
+ENV KNX_INTERFACE iptn:172.17.0.1:3700
+ENV KNX_PA 1.1.238
+ENV KNXD_PARAMETERS -u -d/var/log/eibd.log -c
 
 #CMD ["apache2-foreground"]
 #CMD knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && chmod a+w /tmp/eib && apache2-foreground
