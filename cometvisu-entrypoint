@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-knxd -i $KNX_INTERFACE -e $KNX_PA $KNXD_PARAMETERS"
+knxd -i $KNX_INTERFACE -e $KNX_PA $KNXD_PARAMETERS
 chmod a+w /tmp/eib
 
 echo $CGI_PATH
