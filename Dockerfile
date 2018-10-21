@@ -74,7 +74,6 @@ RUN { \
     echo "echo Content-Type: text/plain"; \
     echo "echo"; \
     echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\" }"'; \
-#    echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\", \"c\": {\"baseURL\": \"/proxy/cgi-bin/\"} }"'; \
     } | tee "/usr/lib/cgi-bin/l" \
  && chmod +x /usr/lib/cgi-bin/l \
  && a2enmod cgi \
@@ -103,18 +102,6 @@ RUN { \
     echo "alias l='ls \$LS_OPTIONS -lA'"; \
     } | tee -a "/root/.bashrc"
 
-#RUN { \
-#    echo "#!/bin/sh"; \
-#    echo "set -e"; \
-#    #echo "knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c"; \
-#    echo "knxd -i \$KNX_INTERFACE -e \$KNX_PA \$KNXD_PARAMETERS"; \
-#    echo "chmod a+w /tmp/eib"; \
-#    echo "apache2-foreground"; \
-#    echo "if [ \"\${1#-}\" != \"$1\" ]; then"; \
-#    echo "    set -- apache2-foreground \"\$@\""; \
-#    echo "fi"; \
-#    echo "exec \"\$@\""; \
-#    } | tee -a "/usr/local/bin/cometvisu-entrypoint" && chmod +x /usr/local/bin/cometvisu-entrypoint
 COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
 ENTRYPOINT ["cometvisu-entrypoint"]
 
@@ -124,7 +111,7 @@ ENV KNX_INTERFACE iptn:172.17.0.1:3700
 ENV KNX_PA 1.1.238
 ENV KNXD_PARAMETERS -u -d/var/log/eibd.log -c
 
-ENV CGI_PATH /cgi-bin/
+ENV CGI_URL_PATH /cgi-bin/
 
 # TODO:
 # HEALTHCHECK
