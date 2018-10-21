@@ -33,7 +33,7 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
 # Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
 RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
  && tar xvf CometVisu.tar.gz \
- && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' editor/lib/Schema.js
+ && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js
 
 ##############
 # Run environment
