@@ -33,7 +33,8 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
 # Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
 RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
  && tar xvf CometVisu.tar.gz \
- && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js
+ && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js \
+ && sed -i 's@http://www.reliablecounter@https://www.reliablecounter@' cometvisu/release/demo/visu_config_demo.xml
 
 ##############
 # Run environment
@@ -56,6 +57,14 @@ LABEL org.label-schema.vendor="The CometVisu project"
 LABEL org.label-schema.version="0.10.2"
 
 # just for testing automated variables
+ARG SOURCE_BRANCH
+ARG SOURCE_COMMIT
+ARG COMMIT_MSG
+ARG DOCKER_REPO
+ARG DOCKERFILE_PATH
+ARG CACHE_TAG
+ARG IMAGE_NAME
+ARG MYTEST
 LABEL test.SOURCE_BRANCH=$SOURCE_BRANCH
 LABEL test.SOURCE_COMMIT=$SOURCE_COMMIT
 LABEL test.COMMIT_MSG=$COMMIT_MSG
