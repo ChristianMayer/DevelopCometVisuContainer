@@ -15,12 +15,16 @@ ENV LD_LIBRARY_PATH $INSTALLDIR/lib
 WORKDIR $SOURCEDIR
 
 # build pthsem
+ENV PTHSEM_DOWNLOAD_SHA256 4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01
 RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fpthsem%2Fpthsem_2.0.8.tar.gz" \
+ && echo "$PTHSEM_DOWNLOAD_SHA256 pthsem_*.tar.gz" | sha256sum -c - \
  && tar -xzf pthsem_2.0.8.tar.gz \
  && cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test && make install
 
 # build knxd
+ENV KNXD_DOWNLOAD_SHA256 f47a02efd8618dc1ec5837e08017dabbaa2712a9b9c36af7784426cc942945_5e
 RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz" \
+ && echo "$KNXD_DOWNLOAD_SHA256 knxd_*.tar.gz" | sha256sum -c - \
  && tar -xzf knxd_0.0.5.1.tar.gz \
  && cd knxd-0.0.5.1 && ./bootstrap.sh \
  && ./configure --enable-onlyeibd --enable-eibnetip --enable-eibnetiptunnel --disable-eibnetipserver \
@@ -31,7 +35,9 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
  && make && make install
 
 # Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
+ENV COMETVISU_DOWNLOAD_SHA256 4ba6cb505c2fd1f5d16c50e0bbb5e98b45ea93a4d9ce17202f1ed5ca0c1432b8
 RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+ && echo "$COMETVISU_DOWNLOAD_SHA256 CometVisu.tar.gz" | sha256sum -c - \
  && tar xvf CometVisu.tar.gz \
  && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js \
  && sed -i 's@http://www.reliablecounter@https://www.reliablecounter@' cometvisu/release/demo/visu_config_demo.xml
