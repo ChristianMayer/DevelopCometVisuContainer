@@ -17,6 +17,7 @@ WORKDIR $SOURCEDIR
 # build pthsem
 ENV PTHSEM_DOWNLOAD_SHA256 4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01
 RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fpthsem%2Fpthsem_2.0.8.tar.gz" \
+ && echo "$PTHSEM_DOWNLOAD_SHA256 pthsem_2.0.8.tar.gz" \
  && echo "$PTHSEM_DOWNLOAD_SHA256 pthsem_2.0.8.tar.gz" | sha256sum -c - \
  && tar -xzf pthsem_2.0.8.tar.gz \
  && cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test && make install
