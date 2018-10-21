@@ -17,13 +17,12 @@ WORKDIR $SOURCEDIR
 # build pthsem
 ENV PTHSEM_DOWNLOAD_SHA256 4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01
 RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusdk%2Fpthsem%2Fpthsem_2.0.8.tar.gz" \
- && echo "$PTHSEM_DOWNLOAD_SHA256 pthsem_2.0.8.tar.gz" \
  && echo "$PTHSEM_DOWNLOAD_SHA256 pthsem_2.0.8.tar.gz" | sha256sum -c - \
  && tar -xzf pthsem_2.0.8.tar.gz \
  && cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test && make install
 
 # build knxd
-ENV KNXD_DOWNLOAD_SHA256 f47a02efd8618dc1ec5837e08017dabbaa2712a9b9c36af7784426cc942945_5e
+ENV KNXD_DOWNLOAD_SHA256 f47a02efd8618dc1ec5837e08017dabbaa2712a9b9c36af7784426cc9429456e
 RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz" \
  && echo "$KNXD_DOWNLOAD_SHA256 knxd_0.0.5.1.tar.gz" | sha256sum -c - \
  && tar -xzf knxd_0.0.5.1.tar.gz \
