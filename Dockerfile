@@ -19,7 +19,7 @@ RUN wget -O pthsem_2.0.8.tar.gz "https://osdn.net/frs/g_redir.php?m=kent&f=bcusd
  && tar -xzf pthsem_2.0.8.tar.gz \
  && cd pthsem-2.0.8 && ./configure --prefix=$INSTALLDIR/ && make && make test && make install
 
-# build eibd
+# build knxd
 RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.tar.gz" \
  && tar -xzf knxd_0.0.5.1.tar.gz \
  && cd knxd-0.0.5.1 && ./bootstrap.sh \
@@ -29,15 +29,11 @@ RUN wget -O knxd_0.0.5.1.tar.gz "https://github.com/knxd/knxd/archive/0.0.5.1.ta
     --disable-shared --enable-static \
     --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ \
  && make && make install
-# && cd knxd-0.0.5.1 && ./bootstrap.sh && ./configure --enable-onlyeibd --enable-eibnetiptunnel --enable-eibnetipserver --enable-ft12 --prefix=$INSTALLDIR/ --with-pth=$INSTALLDIR/ && make && make install
 
-#RUN useradd eibd -s /bin/false -U -M
-#ADD eibd.sh /etc/init.d/eibd
-#RUN chmod +x /etc/init.d/eibd
-#RUN update-rc.d eibd defaults 98 02
-
+# Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
 RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
- && tar xvf CometVisu.tar.gz
+ && tar xvf CometVisu.tar.gz \
+ && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' editor/lib/Schema.js
 
 ##############
 # Run environment
@@ -48,16 +44,10 @@ LABEL maintainer="http://www.cometvisu.org/" \
       org.cometvisu.knxd.version="0.0.5.1"
 
 COPY --from=builder /usr/local/bin/knxd /usr/bin/knxd
-COPY --from=builder /usr/local/lib/lib* /usr/lib/
+COPY --from=builder /usr/local/lib/libpthsem.so.20 /usr/lib/
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/busmonitor1 /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor1 /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor1time /usr/src/knxd-0.0.5.1/src/examples/vbusmonitor2 /usr/src/knxd-0.0.5.1/src/examples/groupswrite /usr/src/knxd-0.0.5.1/src/examples/groupwrite /usr/src/knxd-0.0.5.1/src/examples/groupread /usr/src/knxd-0.0.5.1/src/examples/groupreadresponse /usr/src/knxd-0.0.5.1/src/examples/groupcacheread /usr/src/knxd-0.0.5.1/src/examples/groupsocketread /usr/local/bin/
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r
 COPY --from=builder /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w
-
-#RUN /usr/src/bcusdk-0.0.5/eibd/server/eibd -e 1.2.3 -c -u -d ipt:192.168.0.30
-#RUN /usr/local/bin/knxd -d -e 1.1.239 -c -u ipt:192.168.0.30
-# knxd -u -i ipt:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023
-#knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c -t1023 -f9
-##RUN /usr/local/bin/knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c
 
 ## The knxd port:
 #EXPOSE 6720
@@ -87,8 +77,6 @@ RUN { \
 #    echo 'echo "{ \"v\":\"0.0.1\", \"s\":\"SESSION\", \"c\": {\"baseURL\": \"/proxy/cgi-bin/\"} }"'; \
     } | tee "/usr/lib/cgi-bin/l" \
  && chmod +x /usr/lib/cgi-bin/l \
-#&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibread-cgi /usr/lib/cgi-bin/r \
-#&& ln -s /usr/src/knxd-0.0.5.1/src/examples/eibwrite-cgi /usr/lib/cgi-bin/w \
  && a2enmod cgi \
  && a2enmod headers
 
@@ -142,5 +130,3 @@ ENV CGI_PATH /cgi-bin/
 # HEALTHCHECK
 
 CMD ["apache2-foreground"]
-#CMD knxd -u -i iptn:192.168.0.30:3671 -d/var/log/eibd.log -e 1.1.239 -c && chmod a+w /tmp/eib && apache2-foreground
-#CMD knxd -u -i iptn:172.17.0.1:3700 -d/var/log/eibd.log -e 1.1.238 -c && chmod a+w /tmp/eib && apache2-foreground

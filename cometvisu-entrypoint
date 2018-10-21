@@ -5,6 +5,10 @@ knxd -i $KNX_INTERFACE -e $KNX_PA $KNXD_PARAMETERS
 chmod a+w /tmp/eib
 
 echo $CGI_PATH
+CGI_PATH=${CGI_PATH:-/cgi-bin/}
+if [ "${CGI_PATH:-/cgi-bin/}" != "/cgi-bin/" ]; then
+    echo "Non default CGI_PATH: $CGI_PATH"
+fi
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
