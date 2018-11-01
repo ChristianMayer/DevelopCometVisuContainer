@@ -4,7 +4,8 @@ FROM cometvisu/cometvisuabstractbase:latest
 
 # Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
 ENV COMETVISU_DOWNLOAD_SHA256 4ba6cb505c2fd1f5d16c50e0bbb5e98b45ea93a4d9ce17202f1ed5ca0c1432b8
-RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+RUN curl -L -o CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
+#RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
  && echo "$COMETVISU_DOWNLOAD_SHA256 CometVisu.tar.gz" | sha256sum -c - \
  && tar xvf CometVisu.tar.gz \
  && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js \
