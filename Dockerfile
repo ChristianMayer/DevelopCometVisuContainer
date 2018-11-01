@@ -1,11 +1,14 @@
 FROM cometvisu/cometvisuabstractbase:latest
 
 RUN apt-get -qq update \
- && apt-get install -y git openssh-server \
+ && apt-get install -y git openssh-server gnupg \
+ && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+ && apt-get install -y nodejs \
+ && apt-get remove gnupg \
  && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
  && mkdir /var/run/sshd \
  && echo 'root:cometvisu' | chpasswd \
- && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+ && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 EXPOSE 22
 
@@ -31,6 +34,12 @@ RUN { \
     } | tee -a "/root/.bashrc"
 
 # TODO: GIT checkout
+# git co https://github.com/ChristianMayer/CometVisu.git . (TODO)
+# git submodule init
+# git submodule update
+# cd CometVisu
+# npm install
+# ./generate.py source
 
 VOLUME /var/www/html/config
 
