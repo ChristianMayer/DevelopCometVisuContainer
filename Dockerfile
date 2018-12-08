@@ -13,19 +13,12 @@ RUN curl -L -o CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/
  && mv cometvisu/release/* /var/www/html/ \
  && rm -rf CometVisu.tar.gz cometvisu
 
-# Options - especially for development.
-# DO NOT USE for running a real server!
-#RUN pecl install xdebug-2.6.0 \
-# && docker-php-ext-enable xdebug \
-# && { \
-#    echo 'xdebug.remote_enable=1'; \
-#    echo 'xdebug.remote_connect_back=1'; \
-#    echo 'xdebug.remote_port=9000'; \
-#    echo 'display_errors=Off'; \
-#    echo 'log_errors=On'; \
-#    echo 'error_log=/dev/stderr'; \
-#    echo 'file_uploads=On'; \
-#    } | tee "/usr/local/etc/php/php.ini"
+LABEL org.label-schema.build-date="2017-04-09"
+LABEL org.label-schema.description="The CometVisu open source building automation visualisation"
+LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
+LABEL org.label-schema.vcs-ref="v0.10.2"
+LABEL org.label-schema.version="0.10.2"
+
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
     echo "eval \"`dircolors`\""; \
