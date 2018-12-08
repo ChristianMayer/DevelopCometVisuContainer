@@ -5,6 +5,7 @@ RUN apt-get -qq update \
  && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
  && apt-get install -y nodejs \
  && apt-get remove gnupg \
+ && apt-get install -y --no-install-recommends rrdtool \
  && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
  && mkdir /var/run/sshd \
  && echo 'root:cometvisu' | chpasswd \
