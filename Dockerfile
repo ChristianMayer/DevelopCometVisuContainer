@@ -14,7 +14,7 @@ RUN curl -L -o CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/
  && rm -rf CometVisu.tar.gz cometvisu
 
 LABEL org.label-schema.build-date="2017-04-09"
-LABEL org.label-schema.description="The CometVisu open source building automation visualisation"
+LABEL org.label-schema.description="The CometVisu open source building automation visualization"
 LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
 LABEL org.label-schema.vcs-ref="v0.10.2"
 LABEL org.label-schema.version="0.10.2"
