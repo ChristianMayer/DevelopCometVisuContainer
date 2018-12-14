@@ -1,11 +1,18 @@
 Docker container for the CometVisu
 ==================================
 
-This containter contains the CometVisu in release 0.10.2 together with a
- knxd (0.0.5.1) running on a Apache / PHP combo.
- 
- Environment parameters:
-------------------------
+This container will run the [CometVisu building automation visualization](https://www.cometvisu.org/). It also contains an Apache / PHP combo with the knxd (0.0.5.1) as well as RRD support for the diagram plugin.
+
+Available versions:
+-------------------
+
+* `0.10.2`, `latest`:  
+  [![](https://images.microbadger.com/badges/version/cometvisu/cometvisu:latest.svg)](https://microbadger.com/images/cometvisu/cometvisu:latest "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/cometvisu/cometvisu:latest.svg)](https://microbadger.com/images/cometvisu/cometvisu:latest "Get your own image badge on microbadger.com")
+* `testing`, `testing-<date>`:  
+  [![](https://images.microbadger.com/badges/version/cometvisu/cometvisu:testing.svg)](https://microbadger.com/images/cometvisu/cometvisu:testing "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/cometvisu/cometvisu:testing.svg)](https://microbadger.com/images/cometvisu/cometvisu:testing "Get your own image badge on microbadger.com")
+
+Environment parameters:
+-----------------------
 
 |Parameter              |Default                  |Description|
 |-----------------------|-------------------------|-----------|
@@ -24,3 +31,13 @@ CGI_URL_PATH=/rest/
 BACKEND_PROXY_SOURCE=/rest
 BACKEND_PROXY_TARGET=http://192.168.0.10:8080/rest
 ```
+
+Setup:
+------
+
+**Please look at the manual on [https://www.cometvisu.org/](https://www.cometvisu.org/) for the usage instructions!**
+
+The CometVisu should be installed to the directory `/var/www/html`. This would then result in the config files to be located at `/var/www/html/config` which should most likely be a volume then.
+
+The RRD files, when that feature is desired to be used, must be located in the directory `/var/www/rrd/`. So this would also be a volume as the RRD files must be created and filled up from an external source to this container.  
+**NOTE:** the RRD files must be compatible in architecture as they can't be used otherwise.

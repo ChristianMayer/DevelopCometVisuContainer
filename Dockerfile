@@ -5,7 +5,6 @@ RUN apt-get -qq update \
  && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
  && apt-get install -y nodejs \
  && apt-get remove gnupg \
- && apt-get install -y --no-install-recommends rrdtool \
  && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
  && mkdir /var/run/sshd \
  && echo 'root:cometvisu' | chpasswd \
@@ -26,6 +25,7 @@ RUN pecl install xdebug-2.6.0 \
     echo 'error_log=/dev/stderr'; \
     echo 'file_uploads=On'; \
     } | tee "/usr/local/etc/php/php.ini"
+# Make life more easy on the shell in the container
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
     echo "eval \"`dircolors`\""; \
@@ -33,6 +33,12 @@ RUN { \
     echo "alias ll='ls \$LS_OPTIONS -l'"; \
     echo "alias l='ls \$LS_OPTIONS -lA'"; \
     } | tee -a "/root/.bashrc"
+
+LABEL org.label-schema.build-date="none"
+LABEL org.label-schema.description="The CometVisu open source building automation visualization - development container"
+LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
+LABEL org.label-schema.vcs-ref="devel"
+LABEL org.label-schema.version="devel"
 
 # TODO: GIT checkout
 # git co https://github.com/ChristianMayer/CometVisu.git . (TODO)
@@ -42,5 +48,5 @@ RUN { \
 # npm install
 # ./generate.py source
 
-VOLUME /var/www/html/config
+VOLUME /var/www/html/resource/config
 
