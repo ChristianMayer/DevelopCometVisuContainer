@@ -16,6 +16,8 @@ EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
 VOLUME /etc/ssh
 
+COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
+
 # Options - especially for development.
 # DO NOT USE for running a real server!
 RUN pecl install xdebug-2.6.0 \
@@ -29,6 +31,7 @@ RUN pecl install xdebug-2.6.0 \
     echo 'error_log=/dev/stderr'; \
     echo 'file_uploads=On'; \
     } | tee "/usr/local/etc/php/php.ini"
+EXPOSE 9000
 # Make life more easy on the shell in the container
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
