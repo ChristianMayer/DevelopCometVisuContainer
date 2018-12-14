@@ -8,9 +8,13 @@ RUN apt-get -qq update \
  && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
  && mkdir /var/run/sshd \
  && echo 'root:cometvisu' | chpasswd \
- && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+ && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+ && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
+ && mkdir /etc/ssh/root.ssh \
+ && ln -s /etc/ssh/root.ssh/ /root/.ssh
 EXPOSE 22
+# Keep SSH server information over restarts e.g. to prevent changing fingerprints
+VOLUME /etc/ssh
 
 # Options - especially for development.
 # DO NOT USE for running a real server!
