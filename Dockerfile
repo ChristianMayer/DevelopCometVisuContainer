@@ -48,5 +48,7 @@ LABEL org.label-schema.version="devel"
 # npm install
 # ./generate.py source
 
-VOLUME /var/www/html/resource/config
+# All development files (including the config) will stay within /var/www/html
+# so that one has to be a volume - or the source files might get lost
+VOLUME /var/www/html
 
