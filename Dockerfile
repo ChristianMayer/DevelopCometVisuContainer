@@ -21,7 +21,7 @@ COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
 
 # Options - especially for development.
 # DO NOT USE for running a real server!
-RUN pecl install xdebug-2.6.0 \
+RUN pecl install xdebug \
  && docker-php-ext-enable xdebug \
  && { \
     echo 'xdebug.remote_enable=1'; \
