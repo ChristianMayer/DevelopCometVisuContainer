@@ -2,7 +2,7 @@ FROM cometvisu/cometvisuabstractbase:latest
 
 RUN apt-get -qq update \
  && apt-get install -y git openssh-server gnupg \
- && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+ && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
  && apt-get install -y nodejs \
  && apt-get remove gnupg \
  && apt-get install -y tcpdump \
@@ -17,7 +17,7 @@ EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
 VOLUME /etc/ssh
 
-COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
+#COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
 
 # Options - especially for development.
 # DO NOT USE for running a real server!
