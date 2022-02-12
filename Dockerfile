@@ -17,7 +17,7 @@ EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
 VOLUME /etc/ssh
 
-#COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
+COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
 
 # Options - especially for development.
 # DO NOT USE for running a real server!
@@ -47,14 +47,6 @@ LABEL org.label-schema.description="The CometVisu open source building automatio
 LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
 LABEL org.label-schema.vcs-ref="devel"
 LABEL org.label-schema.version="devel"
-
-# TODO: GIT checkout
-# git co https://github.com/ChristianMayer/CometVisu.git . (TODO)
-# git submodule init
-# git submodule update
-# cd CometVisu
-# npm install
-# ./generate.py source
 
 # All development files (including the config) will stay within /var/www/html
 # so that one has to be a volume - or the source files might get lost
