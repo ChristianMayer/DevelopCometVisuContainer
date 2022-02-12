@@ -5,6 +5,7 @@ on:
     branches: [ master, source ]
   pull_request:
     branches: [ master, source ]
+  workflow_dispatch:
 
 jobs:
 
@@ -43,6 +44,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          platforms: linux/amd64,linux/arm/v7
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
           tags: christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }},christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}    
