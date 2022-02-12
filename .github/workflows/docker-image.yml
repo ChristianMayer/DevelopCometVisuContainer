@@ -18,6 +18,10 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
+      - 
+        name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"  
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -41,4 +45,4 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm/v7
           push: true
-          tags: christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}-$(date +%s),christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}    
+          tags: christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }},christianmayer/developcometvisucontainer:${{ steps.extract_branch.outputs.branch }}    
