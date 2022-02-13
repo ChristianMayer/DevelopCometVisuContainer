@@ -17,7 +17,8 @@ EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
 VOLUME /etc/ssh
 
-COPY cometvisu-entrypoint /usr/local/bin/cometvisu-entrypoint
+COPY develop-entrypoint /usr/local/bin/develop-entrypoint
+ENTRYPOINT ["develop-entrypoint"]
 
 # Options - especially for development.
 # DO NOT USE for running a real server!
