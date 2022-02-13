@@ -5,4 +5,5 @@ echo "Starting sshd..."
 /usr/sbin/sshd
 
 # pass over to original entrypoint
+echo "Passing over to original entrypoint '$@'..."
 exec cometvisu-entrypoint "$@"
