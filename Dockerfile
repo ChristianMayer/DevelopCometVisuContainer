@@ -25,15 +25,15 @@ ENTRYPOINT ["develop-entrypoint"]
 RUN pecl install xdebug \
  && docker-php-ext-enable xdebug \
  && { \
-    echo 'xdebug.remote_enable=1'; \
-    echo 'xdebug.remote_connect_back=1'; \
-    echo 'xdebug.remote_port=9000'; \
+    echo 'xdebug.mode=debug'; \
+    echo 'xdebug.discover_client_host=1'; \
+    echo 'xdebug.client_port=9003'; \
     echo 'display_errors=Off'; \
     echo 'log_errors=On'; \
     echo 'error_log=/dev/stderr'; \
     echo 'file_uploads=On'; \
     } | tee "/usr/local/etc/php/php.ini"
-EXPOSE 9000
+EXPOSE 9003
 # Make life more easy on the shell in the container
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
