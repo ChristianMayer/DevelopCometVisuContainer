@@ -11,7 +11,7 @@ RUN apt-get -qq update \
  && echo 'root:cometvisu' | chpasswd \
  && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
- && mkdir /etc/ssh/root.ssh \
+ && mkdir -p /etc/ssh/root.ssh \
  && ln -s /etc/ssh/root.ssh/ /root/.ssh
 EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
