@@ -7,7 +7,7 @@ RUN apt-get -qq update \
  && apt-get remove gnupg \
  && apt-get install -y tcpdump \
  && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
- && mkdir /var/run/sshd \
+ && mkdir -p /var/run/sshd \
  && echo 'root:cometvisu' | chpasswd \
  && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
