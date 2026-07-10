@@ -2,7 +2,7 @@ FROM cometvisu/cometvisuabstractbase:latest
 
 RUN apt-get -qq update \
  && apt-get install -y git openssh-server gnupg \
- && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+ && curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - \
  && apt-get install -y nodejs \
  && apt-get remove gnupg \
  && apt-get install -y tcpdump \
