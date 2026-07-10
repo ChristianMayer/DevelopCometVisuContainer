@@ -1,4 +1,4 @@
-FROM cometvisu/cometvisuabstractbase:testing
+FROM cometvisu/cometvisuabstractbase:latest
 
 RUN apt-get -qq update \
  && apt-get install -y git openssh-server gnupg \
