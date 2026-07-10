@@ -12,6 +12,7 @@ RUN apt-get -qq update \
  && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
  && mkdir -p /etc/ssh/root.ssh \
+ && rm -f /root/.ssh \
  && ln -s /etc/ssh/root.ssh/ /root/.ssh
 EXPOSE 22
 # Keep SSH server information over restarts e.g. to prevent changing fingerprints
