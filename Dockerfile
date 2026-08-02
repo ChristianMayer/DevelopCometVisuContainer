@@ -1,24 +1,41 @@
-##############
-# Run environment
-FROM cometvisu/cometvisuabstractbase:latest
+FROM cometvisu/cometvisuabstractbase:testing
 
-# Get CometVisu release 0.10.2 - and patch it inplace to make the editor work with newer Webkit browsers
-RUN export COMETVISU_DOWNLOAD_SHA256=4ba6cb505c2fd1f5d16c50e0bbb5e98b45ea93a4d9ce17202f1ed5ca0c1432b8 \
- && curl -L -o CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
-#RUN wget -O CometVisu.tar.gz https://github.com/CometVisu/CometVisu/releases/download/v0.10.2/CometVisu-0.10.2.tar.gz \
- && echo "$COMETVISU_DOWNLOAD_SHA256 CometVisu.tar.gz" | sha256sum -c - \
- && tar xvf CometVisu.tar.gz \
- && sed -i 's/return 1==$.browser.webkit/return e;1==$.browser.webkit/' cometvisu/release/editor/lib/Schema.js \
- && sed -i 's@http://www.reliablecounter@https://www.reliablecounter@' cometvisu/release/demo/visu_config_demo.xml \
- && mv cometvisu/release/* /var/www/html/ \
- && rm -rf CometVisu.tar.gz cometvisu
+RUN apt-get -qq update \
+ && apt-get install -y git openssh-server gnupg \
+ && curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - \
+ && apt-get install -y nodejs \
+ && apt-get remove gnupg \
+ && apt-get install -y tcpdump \
+ && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+ && mkdir -p /var/run/sshd \
+ && echo 'root:cometvisu' | chpasswd \
+ && sed -i 's/#*\s*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+ && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
+ && mkdir -p /etc/ssh/root.ssh \
+ && rm -rf /root/.ssh \
+ && ln -s /etc/ssh/root.ssh/ /root/.ssh
+EXPOSE 22
+# Keep SSH server information over restarts e.g. to prevent changing fingerprints
+VOLUME /etc/ssh
 
-LABEL org.label-schema.build-date="2017-04-09"
-LABEL org.label-schema.description="The CometVisu open source building automation visualization"
-LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
-LABEL org.label-schema.vcs-ref="v0.10.2"
-LABEL org.label-schema.version="0.10.2"
+COPY develop-entrypoint /usr/local/bin/develop-entrypoint
+ENTRYPOINT ["develop-entrypoint"]
 
+# Options - especially for development.
+# DO NOT USE for running a real server!
+RUN pecl install xdebug \
+ && docker-php-ext-enable xdebug \
+ && { \
+    echo 'xdebug.mode=debug'; \
+    echo 'xdebug.discover_client_host=1'; \
+    echo 'xdebug.client_port=9003'; \
+    echo 'display_errors=Off'; \
+    echo 'log_errors=On'; \
+    echo 'error_log=/dev/stderr'; \
+    echo 'file_uploads=On'; \
+    } | tee "/usr/local/etc/php/php.ini"
+EXPOSE 9003
+# Make life more easy on the shell in the container
 RUN { \
     echo "export LS_OPTIONS='--color=auto'"; \
     echo "eval \"\`dircolors -b\`\""; \
@@ -27,5 +44,13 @@ RUN { \
     echo "alias l='ls \$LS_OPTIONS -lA'"; \
     } | tee -a "/root/.bashrc"
 
-VOLUME /var/www/html/config
+LABEL org.label-schema.build-date="none"
+LABEL org.label-schema.description="The CometVisu open source building automation visualization - development container"
+LABEL org.label-schema.vcs-url="https://github.com/CometVisu/CometVisu"
+LABEL org.label-schema.vcs-ref="devel"
+LABEL org.label-schema.version="devel"
+
+# All development files (including the config) will stay within /var/www/html
+# so that one has to be a volume - or the source files might get lost
+VOLUME /var/www/html
 
